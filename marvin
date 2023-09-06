@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 #set the color
 GREEN="\e[32m"
 ENDCOLOR="\e[0m"

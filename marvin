@@ -1,0 +1,137 @@
+#!/bin/bash
+
+#set the color
+GREEN="\e[32m"
+ENDCOLOR="\e[0m"
+LGREEN="92"
+BOLD="\e[1;${LGREEN}m"
+ITA="\e[3;${LGREEN}m"
+
+#Some ASCII
+logo="${GREEN}
+                                        ██╗
+
+    ███╗   ███╗ █████╗ ██████╗ ██╗   ██╗██╗███╗   ██╗
+    ████╗ ████║██╔══██╗██╔══██╗██║   ██║██║████╗  ██║
+    ██╔████╔██║███████║██████╔╝██║   ██║██║██╔██╗ ██║
+    ██║╚██╔╝██║██╔══██║██╔══██╗╚██╗ ██╔╝██║██║╚██╗██║
+    ██║ ╚═╝ ██║██║  ██║██║  ██║ ╚████╔╝ ██║██║ ╚████║
+    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝  ╚═══╝
+${ENDCOLOR}"
+
+marvin="${GREEN}
+          
+                            ███
+                          ██░░███
+                  ████████░░░░░░████ 
+                ██░░░░░░░░░░░░░░░░░░███
+                  ██░░░░░░░░░░░░░░░░░░███
+                ██████░░░░░░░░░░░░░░░░  ██
+              ██░░░░░░░░░░░░░░░░██░░██  ██
+                ██░░░░░░░░░░░░░░██░░██░░██        2.0 Assistant
+                ████░░░░░░░░░░  ██░░██░░░░██       By Tristan
+              ██░░░░░░░░░░░░░░░░██░░██░░░░██
+                ██░░░░░░░░██░░░░░░░░░░░░░░██
+                  ██░░░░░░░░██████░░██████
+                 ██▒▒░░░░░░░░▒▒░░░░░░░░░░██
+                ███░░▒▒░░░░░░░░░░░░░░░░██
+         ██░░░░░░░░░░░░░░░░░░    ░░░░░░██
+            ██░░░░░░░░░░░░░░░░░░░░░░░░░░██
+              ██░░░░░░░░░░░░░░░░░░░░░░░░░░██
+                 ████████████████████████
+${ENDCOLOR}"
+
+#Print Marvin and the logo in green at launch
+echo -e  "$marvin $logo "
+
+case "$1" in
+	-h | --help | -help) 
+	printf "                       Define by Mahgnislaw\n        :: Usage :: Assistant and maybe a friend, who know's \n Made for a training in cybersecurity. A way to learn Bash scripting\n\n"
+	exit 1
+	;;
+esac
+
+while true; do
+	#Input service
+	if [ "$OTHER_REQUEST" == "yes" ]; then
+		echo
+		echo -e "${BOLD}Need something else ?${ENDCOLOR}"
+	elif [ "$OTHER_REQUEST" == "yes_clear" ]; then
+		echo
+		echo -e  "$marvin $logo "
+		echo -e "${BOLD}Need something else ?${ENDCOLOR}" 
+	else
+		echo -e "${BOLD}Hi $USER how can i help you ?${ENDCOLOR}"
+	fi
+	echo
+
+	read -r REQUEST
+
+	#Response
+
+	case $REQUEST in
+
+		*frien*)
+			echo -e "${ITA}We are friends, at least for the moment${ENDCOLOR}"
+			parole "/home/kali/Desktop/FRIENDS/lorie.mp4" 2>/dev/null
+			OTHER_REQUEST="yes"
+			;;
+
+		*date* | *time* | *day*)
+			DAY=$(date +%A)
+			DAYNUM=$(date +%d)
+			MONTH=$(date +%B)
+			YEAR=$(date +%Y)
+			echo -e "${ITA}Todays is the $DAY $DAYNUM of $MONTH $YEAR${ENDCOLOR}"
+			OTHER_REQUEST="yes"
+			;;
+
+
+		*system* | *pc* | *computer* | *spec*)
+			echo -e "${ITA}There is the spec of the device:${ENDCOLOR}"
+			neofetch
+			OTHER_REQUEST="yes"
+			;;
+
+		*clear*)
+			clear
+			OTHER_REQUEST="yes_clear"
+			;;
+
+		*exit* | *bye*)
+			echo -e "${ITA}Bye master, it was a pleasure${ENDCOLOR}"
+			exit 0
+			;;
+
+		*joke*)
+			#get a ramdom line from file
+			JOKE=$(shuf -n 1 /home/kali/Desktop/FRIENDS/joke.txt)
+			echo -e "${ITA}$JOKE${ENDCOLOR}"
+			OTHER_REQUEST="yes"
+			;;
+
+       		 *weather*)
+           		 # Fetch weather information from wttr.in using curl
+            		 weather=$(curl -s wttr.in)
+
+           		# Display weather information
+           		echo -e "${ITA}Weather information:${ENDCOLOR}"
+           		echo "$weather"
+			OTHER_REQUEST="yes"
+			;;
+
+		*calcul* | *math*)
+			echo -e "${ITA}Enter the equation and i solve it${ENDCOLOR}"
+			read  EQUATION
+			RESULT=$(awk "BEGIN { print $EQUATION}")
+			echo -e "${ITA}Result = $RESULT${ENDCOLOR}"
+			OTHER_REQUEST="yes"
+			;;
+		*)
+			echo -e "${ITA}I don't understand, try again${ENDCOLOR}"
+			OTHER_REQUEST="yes"
+			;;
+		esac
+
+	done
+exit 0
